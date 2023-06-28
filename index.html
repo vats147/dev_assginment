@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>City Lookup</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <h1>City Lookup</h1>
+  <input type="text" id="cityInput" placeholder="Type a city name">
+  <div id="cityDropdown"></div>
+  <div id="cityInfo"></div>
+  <script>
+       $(document).ready(function() {
+  $('#cityInput').on('input', function() {
+    var input = $(this).val();
+    if (input.length >= 3) {
+      $.ajax({
+        url: 'fetchCities.php',
+        method: 'POST',
+        data: { input: input },
+        success: function(response) {
+          $('#cityDropdown').html(response);
+        }
+      });
+    } else {
+      $('#cityDropdown').empty();
+    }
+  });
+
+  $(document).on('click', '.cityOption', function() {
+    var city = $(this).text();
+    $.ajax({
+      url: 'fetchCityInfo.php',
+      method: 'POST',
+      data: { city: city },
+      success: function(response) {
+        $('#cityInfo').html(response);
+      }
+    });
+  });
+});
+
+       </script>
+</body>
+</html>
